@@ -1,0 +1,29 @@
+# Virtual env
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+
+# Behave / Allure
+reports/
+screenshots/
+.allure/
+allure-results/
+allure-report/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

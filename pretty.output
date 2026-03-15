@@ -1,0 +1,106 @@
+Feature: Shopping Cart # features/cart.feature:1
+  As a logged-in user I want to add and remove items from the cart.
+  Feature: Shopping Cart  # features/cart.feature:1
+
+  Scenario: Add one item to cart             # features/cart.feature:7
+    Given I am logged in as "standard_user"  # features/steps/login_steps.py:25
+    Given I am on the inventory page         # features/steps/login_steps.py:58
+    When I add the first product to the cart # features/steps/cart_steps.py:7
+    Then the cart badge should show "1" item # features/steps/cart_steps.py:22
+      ASSERT FAILED: Expected cart badge 1, got 0
+
+
+  Scenario: Remove one item from cart             # features/cart.feature:12
+    Given I am logged in as "standard_user"       # features/steps/login_steps.py:25
+    Given I am on the inventory page              # features/steps/login_steps.py:58
+    And I add the first product to the cart       # None
+    And the cart badge should show "1" item       # None
+    When I remove the first product from the cart # None
+    Then the cart badge should not be visible     # None
+
+  Scenario: Verify cart badge count with multiple items  # features/cart.feature:19
+    Given I am logged in as "standard_user"              # features/steps/login_steps.py:25
+    Given I am on the inventory page                     # features/steps/login_steps.py:58
+    When I add the first product to the cart             # features/steps/cart_steps.py:7
+    And I add the second product to the cart             # features/steps/cart_steps.py:12
+    Then the cart badge should show "2" items            # features/steps/cart_steps.py:27
+      ASSERT FAILED: Expected cart badge 2, got 0
+
+
+  Scenario: Remove item from cart page        # features/cart.feature:25
+    Given I am logged in as "standard_user"   # features/steps/login_steps.py:25
+    Given I am on the inventory page          # features/steps/login_steps.py:58
+    And I add the first product to the cart   # None
+    When I open the cart                      # None
+    And I remove the first item from the cart # None
+    Then the cart should have "0" items       # None
+
+Feature: Checkout # features/checkout.feature:1
+  As a logged-in user I want to complete checkout and see order confirmation.
+  Feature: Checkout  # features/checkout.feature:1
+
+  Scenario: Complete checkout with valid user information                                      # features/checkout.feature:7
+    Given I am logged in as "standard_user"                                                    # features/steps/login_steps.py:25
+    Given I am on the inventory page                                                           # features/steps/login_steps.py:58
+    And I add the first product to the cart                                                    # None
+    And I open the cart                                                                        # None
+    When I proceed to checkout                                                                 # None
+    And I fill checkout information with first name "Jane" last name "Doe" postal code "12345" # None
+    And I finish the checkout                                                                  # None
+    Then I should see the order confirmation message "Thank you for your order!"               # None
+
+  Scenario: Verify order confirmation details                                                  # features/checkout.feature:16
+    Given I am logged in as "standard_user"                                                    # features/steps/login_steps.py:25
+    Given I am on the inventory page                                                           # features/steps/login_steps.py:58
+    And I add the first product to the cart                                                    # None
+    And I open the cart                                                                        # None
+    When I proceed to checkout                                                                 # None
+    And I fill checkout information with first name "Jane" last name "Doe" postal code "12345" # None
+    And I finish the checkout                                                                  # None
+    Then the confirmation header should contain "Thank you for your order!"                    # None
+
+Feature: Login # features/login.feature:1
+  As a user I want to log in to SauceDemo so that I can shop for products.
+  Scenario: Successful login with valid credentials                         # features/login.feature:4
+    Given I am on the login page                                            # features/steps/login_steps.py:8
+    When I log in with username "standard_user" and password "secret_sauce" # features/steps/login_steps.py:14
+    Then I should be on the inventory page                                  # features/steps/login_steps.py:34
+    And the inventory page should display products                          # features/steps/login_steps.py:41
+
+  Scenario: Unsuccessful login with locked out user                           # features/login.feature:10
+    Given I am on the login page                                              # features/steps/login_steps.py:8
+    When I log in with username "locked_out_user" and password "secret_sauce" # features/steps/login_steps.py:14
+    Then an error message should be displayed                                 # features/steps/login_steps.py:47
+    And the error message should contain "locked out"                         # features/steps/login_steps.py:52
+
+  Scenario Outline: Login with different valid users -- @1.1                # features/login.feature:22
+    Given I am on the login page                                            # features/steps/login_steps.py:8
+    When I log in with username "standard_user" and password "secret_sauce" # features/steps/login_steps.py:14
+    Then I should be on the inventory page                                  # features/steps/login_steps.py:34
+
+Feature: Navigation and Logout # features/navigation.feature:1
+  As a logged-in user I want to log out from the side menu.
+  Feature: Navigation and Logout  # features/navigation.feature:1
+
+  Scenario: Logout successfully from the side menu  # features/navigation.feature:7
+    Given I am logged in as "standard_user"         # features/steps/login_steps.py:25
+    Given I am on the inventory page                # features/steps/login_steps.py:58
+    When I open the side menu                       # features/steps/navigation_steps.py:7
+    And I click logout                              # features/steps/navigation_steps.py:13
+      Traceback (most recent call last):
+        File "/Users/aminforout/opt/anaconda3/lib/python3.9/site-packages/behave/model.py", line 1991, in run
+          match.run(runner.context)
+        File "/Users/aminforout/opt/anaconda3/lib/python3.9/site-packages/behave/matchers.py", line 105, in run
+          self.func(context, *args, **kwargs)
+        File "features/steps/navigation_steps.py", line 15, in step_click_logout
+          context.menu_page.logout()
+        File "/Users/aminforout/Desktop/projects/Testing/cucumber/saucedemo-bdd-automation-framework/pages/menu_page.py", line 14, in logout
+          self.find_clickable(self.LOGOUT_LINK).click()
+        File "/Users/aminforout/Desktop/projects/Testing/cucumber/saucedemo-bdd-automation-framework/pages/base_page.py", line 34, in find_clickable
+          return wait.until(EC.element_to_be_clickable(locator_tuple))
+        File "/Users/aminforout/opt/anaconda3/lib/python3.9/site-packages/selenium/webdriver/support/wait.py", line 105, in until
+          raise TimeoutException(message, screen, stacktrace)
+      selenium.common.exceptions.TimeoutException: Message:
+
+    Then I should be on the login page              # None
+
