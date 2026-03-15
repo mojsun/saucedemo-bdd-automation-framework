@@ -31,6 +31,16 @@ This project demonstrates:
 
 ---
 
+---
+
+## Test Execution
+
+Example BDD test run:
+
+![Test Run](docs/screencapture-framework-reports-behave-report-html.png)
+
+---
+
 ## Project Structure
 
 ```
